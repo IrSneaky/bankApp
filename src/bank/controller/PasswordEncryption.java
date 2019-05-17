@@ -57,6 +57,6 @@ public class PasswordEncryption
 		//put the attempted login pass into hash
 		String tempHash = hashThePass(tempPass, salt);
 		//returning results of check
-		return (tempHash == hashedPass);
+		return (tempHash.equals(hashedPass));
 	}
 }
