@@ -17,11 +17,14 @@ public class InitDatabase
 		this.pass = pass;
 	}
 
+	//checks if db is made
 	public void createDB()
 	{
 		try
 		{
+			//db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
+			//sets timezone
 			String connString = "jdbc:mysql://localhost?user=" + user +
 				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
 				"serverTimezone=America/New_York";
@@ -38,16 +41,20 @@ public class InitDatabase
 			e.printStackTrace();
 		}
 	}
+	//checks for table
 	public void createCustomers()
 	{
 		try
 		{
+			//sets db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
+			//sets proper timezone
 			String connString = "jdbc:mysql://localhost/bank?user=" + user +
 				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
 				"serverTimezone=America/New_York";
 			Connection conn = DriverManager.getConnection(connString);
 			Statement stmt = conn.createStatement();
+			//creates the customer table
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS customers (accNum INT AUTO_INCREMENT, "
 					+ "fullName VARCHAR(40), "
 					+ "balance DOUBLE(50, 2), "
@@ -65,17 +72,20 @@ public class InitDatabase
 			e.printStackTrace();
 		}
 	}
-
+	//checks if table is made
 	public void createEmployees()
 	{
 		try
 		{
+			//sets db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
+			//sets proper timezone
 			String connString = "jdbc:mysql://localhost/bank?user=" + user +
 				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
 				"serverTimezone=America/New_York";
 			Connection conn = DriverManager.getConnection(connString);
 			Statement stmt = conn.createStatement();
+			//creates employee table
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS employees (id INT AUTO_INCREMENT, " +
 					"fullName VARCHAR(40), " +
 					"position VARCHAR(24), " + 

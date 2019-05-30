@@ -40,6 +40,7 @@ class Login
 				if(passEncrypt.checkPass(passCheck, customer1.getPassword(), customer1.getSalt()))
 				{
 					System.out.println("Account created");
+					//puts in db user and pass to object
 					StoreCustomer cusObj = new StoreCustomer(args[0], args[1]);
 					cusObj.insertCustomer(customer1.getName(), 
 							customer1.getBalance(), 
