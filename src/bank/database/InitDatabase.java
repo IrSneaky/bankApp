@@ -60,7 +60,7 @@ public class InitDatabase
 					+ "balance DOUBLE(50, 2), "
 					+ "username VARCHAR(24), "
 					+ "password VARCHAR(64), "
-					+ "salt VARBINARY(64), "
+					+ "salt VARCHAR(64), "
 					+ "PRIMARY KEY (accNum))");
 			System.out.println("Table customers created in the database");
 			stmt.close();

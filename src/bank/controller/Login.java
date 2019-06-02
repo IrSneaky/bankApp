@@ -33,10 +33,9 @@ class Login
 				customer1.setPassword(passEncrypt.hashThePass(infoList[2], customer1.getSalt()));
 				System.out.println("Please re-enter password");
 				String passCheck = input1.nextLine();
-	
+					
 				db.createDB();
 				db.createCustomers();
-		
 				if(passEncrypt.checkPass(passCheck, customer1.getPassword(), customer1.getSalt()))
 				{
 					System.out.println("Account created");

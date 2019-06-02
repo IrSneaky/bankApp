@@ -23,7 +23,7 @@ public class StoreCustomer
 
 
 	public void insertCustomer(String fullName, double balance, String username, 
-			String password, byte[] salt)
+			String password, String salt)
 	{
 		try
 		{
@@ -44,7 +44,7 @@ public class StoreCustomer
 			pstmt.setDouble(2, balance);
 			pstmt.setString(3, username);
 			pstmt.setString(4, password);
-			pstmt.setBytes(5, salt);
+			pstmt.setString(5, salt);
 			pstmt.executeUpdate();
 			pstmt.close();
 			conn.close();
@@ -81,7 +81,7 @@ public class StoreCustomer
 				tempC.setBalance(rs.getDouble(3));
 				tempC.setUsername(rs.getString(4));
 				tempC.setPassword(rs.getString(5));
-				tempC.setSalt(rs.getBytes(6));
+				tempC.setSalt(rs.getString(6));
 			}
 			else
 			{

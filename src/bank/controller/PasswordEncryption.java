@@ -10,14 +10,15 @@ import javax.crypto.spec.PBEKeySpec;
 
 public class PasswordEncryption
 {
-	public static byte[] getSalt()
+	public static String getSalt()
 	{
 		try
 		{
 			SecureRandom rand = SecureRandom.getInstance("SHA1PRNG"); //gets secured random
 			byte[] salt = new byte[32]; //256 bit salt
 			rand.nextBytes(salt);
-			return salt;
+			String saltString = Base64.getEncoder().encodeToString(salt);
+			return saltString;
 		}
 		catch(NoSuchAlgorithmException e)
 		{
@@ -27,12 +28,13 @@ public class PasswordEncryption
 		return null;
 	}	
 
-	public static String hashThePass(String password, byte[] salt)
+	public static String hashThePass(String password, String saltString)
 	{
 		char[] pass = password.toCharArray(); //cast string to match keyspec constructor
 		int iterations = 20000; //8ms goal for SHA-256 on lowend cpu
 		int keyLength = 256; //sha-256 output a 256 bit or 32 btye hash
 		String algo = "PBKDF2WithHmacSHA256";//Sha-256 prf for hash
+		byte[] salt = Base64.getDecoder().decode(saltString);
 		try
 		{
 			PBEKeySpec spec = new PBEKeySpec(pass, salt, iterations, keyLength);
@@ -52,10 +54,10 @@ public class PasswordEncryption
 		return "";
 	}
 
-	public static boolean checkPass(String tempPass, String hashedPass, byte[] salt)
+	public static boolean checkPass(String tempPass, String hashedPass, String saltString)
 	{
 		//put the attempted login pass into hash
-		String tempHash = hashThePass(tempPass, salt);
+		String tempHash = hashThePass(tempPass, saltString);
 		//returning results of check
 		return (tempHash.equals(hashedPass));
 	}

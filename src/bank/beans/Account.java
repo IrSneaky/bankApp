@@ -5,7 +5,7 @@ public class Account
 	private String fullName;
 	private String username;
 	private String password;
-	private byte[] salt;
+	private String salt;
 
 	public Account(){}
 
@@ -39,12 +39,12 @@ public class Account
 		this.password = password;
 	}
 
-	public byte[] getSalt()
+	public String getSalt()
 	{
 		return salt;
 	}
 
-	public void setSalt(byte[] salt)
+	public void setSalt(String salt)
 	{
 		this.salt = salt;
 	}

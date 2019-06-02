@@ -22,7 +22,7 @@ public class StoreEmployee
 
 
 	public void insertEmployee(String fullName, String position, String username, 
-			String password, byte[] salt)
+			String password, String salt)
 	{
 		try
 		{
@@ -42,7 +42,7 @@ public class StoreEmployee
 			pstmt.setString(2, position);
 			pstmt.setString(3, username);
 			pstmt.setString(4, password);
-			pstmt.setBytes(5, salt);
+			pstmt.setString(5, salt);
 			pstmt.executeUpdate();
 			pstmt.close();
 			conn.close();
@@ -79,7 +79,7 @@ public class StoreEmployee
 				tempE.setPosition(rs.getString(3));
 				tempE.setUsername(rs.getString(4));
 				tempE.setPassword(rs.getString(5));
-				tempE.setSalt(rs.getBytes(6));
+				tempE.setSalt(rs.getString(6));
 			}
 			else
 			{

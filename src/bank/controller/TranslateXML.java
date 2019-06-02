@@ -3,6 +3,7 @@ package bank.controller;
 import bank.beans.Customer;
 
 import java.io.File;
+import java.util.Base64;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -37,7 +38,8 @@ public class TranslateXML
 				mainEle.appendChild(customer);
 				//customer account number
 				Element accNum = doc.createElement("accountNumber");
-				accNum.appendChild(doc.createTextNode(customerList[i].getAccountNumber()));
+				accNum.appendChild(doc.createTextNode(
+							Integer.toString(customerList[i].getAccountNumber())));
 				customer.appendChild(accNum);
 				//customer name
 				Element fullName = doc.createElement("fullName");
@@ -45,7 +47,8 @@ public class TranslateXML
 				customer.appendChild(fullName);
 				//customer balance
 				Element balance = doc.createElement("balance");
-				balance.appendChild(doc.createTextNode(customerList[i].getBalance()));
+				balance.appendChild(doc.createTextNode(
+							Double.toString(customerList[i].getBalance())));
 				customer.appendChild(balance);
 				//customer username
 				Element username = doc.createElement("username");
@@ -99,9 +102,11 @@ public class TranslateXML
 				{
 					//reads XML into customer temp
 					Element cEle = (Element) cNode;
-					cTemp.setAccountNumber(cEle.getAttribute("accountNumber"));
+					cTemp.setAccountNumber(
+							Integer.parseInt(cEle.getAttribute("accountNumber")));
 					cTemp.setName(cEle.getAttribute("fullName"));
-					cTemp.setBalance(cEle.getAttribute("balance"));
+					cTemp.setBalance(
+							Double.parseDouble(cEle.getAttribute("balance")));
 					cTemp.setUsername(cEle.getAttribute("username"));
 					cTemp.setPassword(cEle.getAttribute("password"));
 					cTemp.setSalt(cEle.getAttribute("salt"));
