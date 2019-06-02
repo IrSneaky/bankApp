@@ -69,7 +69,8 @@ public class StoreEmployee
 			//search by ID
 			String stmtString = "SELECT * FROM employees WHERE id = ?";
 			PreparedStatement pstmt = conn.prepareStatement(stmtString);
-			ResultSet rs = pstmt.executeQuery(stmtString);
+			pstmt.setInt(1, id);
+			ResultSet rs = pstmt.executeQuery();
 			Employee tempE = new Employee();
 			//checks if result set is pulled
 			if(rs.absolute(1))

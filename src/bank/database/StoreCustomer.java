@@ -68,10 +68,10 @@ public class StoreCustomer
 				"serverTimezone=America/New_York";
 			Connection conn = DriverManager.getConnection(connString);
 			//search by accNum
-			String stmtString = "SELECT * FROM customers WHERE accNum = %d";
+			String stmtString = "SELECT * FROM customers WHERE accNum = ?";
 			PreparedStatement pstmt = conn.prepareStatement(stmtString);
 			pstmt.setInt(1, accNum);
-			ResultSet rs = pstmt.executeQuery(stmtString);
+			ResultSet rs = pstmt.executeQuery();
 			Customer tempC = new Customer();
 			//checks if result set is pulled
 			if(rs.absolute(1))
