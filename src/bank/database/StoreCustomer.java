@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
+import java.util.ArrayList;
 
 public class StoreCustomer
 {
@@ -91,6 +93,48 @@ public class StoreCustomer
 			pstmt.close();
 			conn.close();
 			return tempC;
+		}
+		catch(SQLException | ClassNotFoundException e)
+		{
+			System.err.println("Error opening database");
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	public List<Customer> getCustomers()
+	{
+		try
+		{
+			//set db driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			//connection setup and setting timezone
+			String connString = "jdbc:mysql://localhost/bank?user=" + user +
+				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
+				"serverTimezone=America/New_York";
+			Connection conn = DriverManager.getConnection(connString);
+			//search by accNum
+			String stmtString = "SELECT * FROM customers";
+			PreparedStatement pstmt = conn.prepareStatement(stmtString);
+			ResultSet rs = pstmt.executeQuery();
+			List<Customer> cList = new ArrayList<Customer>();
+			while(rs.next())
+			{
+				Customer tempC = new Customer();
+				//checks if result set is pulled
+				tempC.setAccountNumber(rs.getInt(1));
+				tempC.setName(rs.getString(2));
+				tempC.setBalance(rs.getDouble(3));
+				tempC.setUsername(rs.getString(4));
+				tempC.setPassword(rs.getString(5));
+				tempC.setSalt(rs.getString(6));
+				cList.add(tempC);
+			}
+			rs.close();
+			pstmt.close();
+			conn.close();
+			return cList;
 		}
 		catch(SQLException | ClassNotFoundException e)
 		{
