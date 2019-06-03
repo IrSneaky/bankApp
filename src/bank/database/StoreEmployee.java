@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.List;
+import java.util.ArrayList;
 
 public class StoreEmployee
 {
@@ -91,6 +93,48 @@ public class StoreEmployee
 			pstmt.close();
 			conn.close();
 			return tempE;
+		}
+		catch(SQLException | ClassNotFoundException e)
+		{
+			System.err.println("Error opening database");
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	public List<Employee> getEmployees()
+	{
+		try
+		{
+			//set db driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			//connection setup and setting timezone
+			String connString = "jdbc:mysql://localhost/bank?user=" + user +
+				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
+				"serverTimezone=America/New_York";
+			Connection conn = DriverManager.getConnection(connString);
+			//search by accNum
+			String stmtString = "SELECT * FROM employees";
+			PreparedStatement pstmt = conn.prepareStatement(stmtString);
+			ResultSet rs = pstmt.executeQuery();
+			List<Employee> eList = new ArrayList<Employee>();
+			while(rs.next())
+			{
+				Employee tempE = new Employee();
+				//checks if result set is pulled
+				tempE.setId(rs.getInt(1));
+				tempE.setName(rs.getString(2));
+				tempE.setPosition(rs.getString(3));
+				tempE.setUsername(rs.getString(4));
+				tempE.setPassword(rs.getString(5));
+				tempE.setSalt(rs.getString(6));
+				eList.add(tempE);
+			}
+			rs.close();
+			pstmt.close();
+			conn.close();
+			return eList;
 		}
 		catch(SQLException | ClassNotFoundException e)
 		{

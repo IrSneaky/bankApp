@@ -1,6 +1,6 @@
 package bank.database;
 
-import bank.beans.Customer;
+import bank.beans.*;
 
 import java.io.File;
 import java.util.List;
@@ -117,6 +117,108 @@ public class TranslateXML
 				customers.add(cTemp);
 			}
 			return customers;
+		}
+		catch(Exception e)
+		{
+			System.out.println("XML read failed");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	//sets up a xml file for customers
+	public void employeeXML(List<Employee> employeeList)
+	{
+		try
+		{
+			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
+			Document doc = docBuild.newDocument();
+			Element mainEle = doc.createElement("employees");
+			doc.appendChild(mainEle);
+			//create amount of customers determined by size
+			int size = employeeList.size();
+			for(int i = 0; i < size; i++)
+			{
+				//creates the employee wrap for info
+				Element employee = doc.createElement("employee");
+				mainEle.appendChild(employee);
+				//employee id
+				Element id = doc.createElement("id");
+				id.appendChild(doc.createTextNode(
+						Integer.toString(employeeList.get(i).getId())));
+				employee.appendChild(id);
+				//employee name
+				Element fullName = doc.createElement("fullName");
+				fullName.appendChild(doc.createTextNode(employeeList.get(i).getName()));
+				employee.appendChild(fullName);
+				//employee balance
+				Element position = doc.createElement("position");
+				position.appendChild(doc.createTextNode(employeeList.get(i).getPosition()));
+				employee.appendChild(position);
+				//employee username
+				Element username = doc.createElement("username");
+				username.appendChild(doc.createTextNode(employeeList.get(i).getUsername()));
+				employee.appendChild(username);
+				//employee password
+				Element password = doc.createElement("password");
+				password.appendChild(doc.createTextNode(employeeList.get(i).getPassword()));
+				employee.appendChild(password);
+				//employee salt
+				Element salt = doc.createElement("salt");
+				salt.appendChild(doc.createTextNode(employeeList.get(i).getSalt()));
+				employee.appendChild(salt);
+			}
+			//creates file from info
+			TransformerFactory tranFac = TransformerFactory.newInstance();
+			Transformer tran = tranFac.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File("xml/employees.xml"));
+			tran.transform(source, result);
+		}
+		catch(Exception e)
+		{
+			System.out.println("XML file creation failed");
+			e.printStackTrace();
+		}
+		
+	}
+
+	public List<Employee> readEmployeeXML()
+	{
+		try
+		{
+			//grabs generated xml file from employeeXML function
+			File xmlFile = new File("xml/employee.xml");
+			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
+			Document doc = docBuild.parse(xmlFile);
+			doc.getDocumentElement().normalize();
+			//gets list of employees
+			NodeList employeeNodes = doc.getElementsByTagName("employee");
+			int size = employeeNodes.getLength();
+			//list of employees init
+			List<Employee> employees = new ArrayList<Employee>();
+			for(int i = 0; i < size; i++)
+			{
+				//creates temp employee to insert into list
+				Employee eTemp = new Employee();
+				Node eNode = employeeNodes.item(i);
+				if (eNode.getNodeType() == Node.ELEMENT_NODE)
+				{
+					//reads XML into customer temp
+					Element eEle = (Element) eNode;
+					eTemp.setId(Integer.parseInt(eEle.getAttribute("accountNumber")));
+					eTemp.setName(eEle.getAttribute("fullName"));
+					eTemp.setPosition(eEle.getAttribute("position"));
+					eTemp.setUsername(eEle.getAttribute("username"));
+					eTemp.setPassword(eEle.getAttribute("password"));
+					eTemp.setSalt(eEle.getAttribute("salt"));
+				}
+				//puts temp into list
+				employees.add(eTemp);
+			}
+			return employees;
 		}
 		catch(Exception e)
 		{

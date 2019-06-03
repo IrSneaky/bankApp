@@ -122,9 +122,11 @@ class Login
 			boolean stop = true;
 			Login login = new Login();
 			TranslateXML xml = new TranslateXML();
-			StoreCustomer setup = new StoreCustomer(args[0], args[1]);
+			StoreCustomer setupC = new StoreCustomer(args[0], args[1]);
+			StoreEmployee setupE = new StoreEmployee(args[0], args[1]);
 			System.out.println("Loading database...");
-			login.cList = setup.getCustomers();
+			login.cList = setupC.getCustomers();
+			login.eList = setupE.getEmployees();
 			System.out.println("\nBanking Application. To close, enter exit");
 			System.out.println("=========================================");
 			while (stop)
@@ -151,6 +153,7 @@ class Login
 				{
 					System.out.println("Generating XML...");
 					xml.customerXML(login.cList);
+					xml.employeeXML(login.eList);
 				}
 				else if(choice.equals("display"))
 				{
