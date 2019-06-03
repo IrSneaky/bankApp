@@ -1,9 +1,11 @@
-package bank.controller;
+package bank.database;
 
 import bank.beans.Customer;
 
 import java.io.File;
+import java.util.List;
 import java.util.Base64;
+import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -20,7 +22,7 @@ import org.w3c.dom.Document;
 public class TranslateXML
 {
 	//sets up a xml file for customers
-	public void customerXML(Customer[] customerList)
+	public void customerXML(List<Customer> customerList)
 	{
 		try
 		{
@@ -30,7 +32,7 @@ public class TranslateXML
 			Element mainEle = doc.createElement("customers");
 			doc.appendChild(mainEle);
 			//create amount of customers determined by size
-			int size = customerList.length;
+			int size = customerList.size();
 			for(int i = 0; i < size; i++)
 			{
 				//creates the customer wrap for info
@@ -39,35 +41,35 @@ public class TranslateXML
 				//customer account number
 				Element accNum = doc.createElement("accountNumber");
 				accNum.appendChild(doc.createTextNode(
-							Integer.toString(customerList[i].getAccountNumber())));
+						Integer.toString(customerList.get(i).getAccountNumber())));
 				customer.appendChild(accNum);
 				//customer name
 				Element fullName = doc.createElement("fullName");
-				fullName.appendChild(doc.createTextNode(customerList[i].getName()));
+				fullName.appendChild(doc.createTextNode(customerList.get(i).getName()));
 				customer.appendChild(fullName);
 				//customer balance
 				Element balance = doc.createElement("balance");
 				balance.appendChild(doc.createTextNode(
-							Double.toString(customerList[i].getBalance())));
+						Double.toString(customerList.get(i).getBalance())));
 				customer.appendChild(balance);
 				//customer username
 				Element username = doc.createElement("username");
-				username.appendChild(doc.createTextNode(customerList[i].getUsername()));
+				username.appendChild(doc.createTextNode(customerList.get(i).getUsername()));
 				customer.appendChild(username);
 				//customer password
 				Element password = doc.createElement("password");
-				password.appendChild(doc.createTextNode(customerList[i].getPassword()));
+				password.appendChild(doc.createTextNode(customerList.get(i).getPassword()));
 				customer.appendChild(password);
 				//customer salt
 				Element salt = doc.createElement("salt");
-				salt.appendChild(doc.createTextNode(customerList[i].getSalt()));
+				salt.appendChild(doc.createTextNode(customerList.get(i).getSalt()));
 				customer.appendChild(salt);
 			}
 			//creates file from info
 			TransformerFactory tranFac = TransformerFactory.newInstance();
 			Transformer tran = tranFac.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("customers.xml"));
+			StreamResult result = new StreamResult(new File("xml/customers.xml"));
 			tran.transform(source, result);
 		}
 		catch(Exception e)
@@ -78,12 +80,12 @@ public class TranslateXML
 		
 	}
 
-	public Customer[] readCustomerXML()
+	public List<Customer> readCustomerXML()
 	{
 		try
 		{
 			//grabs generated xml file from customerXML function
-			File xmlFile = new File("customers.xml");
+			File xmlFile = new File("xml/customers.xml");
 			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
 			Document doc = docBuild.parse(xmlFile);
@@ -92,7 +94,7 @@ public class TranslateXML
 			NodeList customerNodes = doc.getElementsByTagName("customer");
 			int size = customerNodes.getLength();
 			//list of customers init
-			Customer[] customers = new Customer[size];
+			List<Customer> customers = new ArrayList<Customer>();
 			for(int i = 0; i < size; i++)
 			{
 				//creates temp customer to insert into list
@@ -112,7 +114,7 @@ public class TranslateXML
 					cTemp.setSalt(cEle.getAttribute("salt"));
 				}
 				//puts temp into list
-				customers[i] = cTemp;
+				customers.add(cTemp);
 			}
 			return customers;
 		}
