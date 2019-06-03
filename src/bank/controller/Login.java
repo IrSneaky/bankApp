@@ -47,7 +47,6 @@ class Login
 						customer1.getUsername(), 
 						customer1.getPassword(),
 						customer1.getSalt());
-				cList.add(customer1);
 				System.out.println("Info stored in db");
 			}
 			else
@@ -99,7 +98,6 @@ class Login
 						employee1.getUsername(), 
 						employee1.getPassword(),
 						employee1.getSalt());
-				eList.add(employee1);
 				System.out.println("Info stored in db");
 			}
 			else
@@ -131,6 +129,8 @@ class Login
 			System.out.println("=========================================");
 			while (stop)
 			{
+				login.cList = setupC.getCustomers();
+				login.eList = setupE.getEmployees();
 				Scanner input1 = new Scanner(System.in);
 				System.out.println("\nCustomer or Employee info?(c or e)");
 				System.out.println("Enter xml to generate xml files.");
