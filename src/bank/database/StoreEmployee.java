@@ -8,13 +8,14 @@ import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Base64;
 
 public class StoreEmployee
 {
 	private String user;
 	private String pass;
 
-	StoreEmployee(String user, String pass)
+	public StoreEmployee(String user, String pass)
 	{
 		this.user = user;
 		this.pass = pass;
@@ -29,8 +30,9 @@ public class StoreEmployee
 			//sets db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//sets timezone and connects
-			String connString = "jdbc:mysql://mysql://localhost/bank?"+
-				"user=" + user + "&password=" + pass;
+			String connString = "jdbc:mysql://localhost/bank?user=" + user +
+				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
+				"serverTimezone=America/New_York";
 			Connection conn = DriverManager.getConnection(connString);
 			//sql statement
 			String stmtString = "INSERT INTO employees "
@@ -54,7 +56,6 @@ public class StoreEmployee
 		}
 	}
 
-
 	public Employee pullEmployee(int id)
 	{
 		try
@@ -66,7 +67,7 @@ public class StoreEmployee
 				"&password=" + pass + "&useLegacyDateTimeCode=false&" + 
 				"serverTimezone=America/New_York";
 			Connection conn = DriverManager.getConnection(connString);
-			//search by ID
+			//search by accNum
 			String stmtString = "SELECT * FROM employees WHERE id = ?";
 			PreparedStatement pstmt = conn.prepareStatement(stmtString);
 			pstmt.setInt(1, id);

@@ -37,7 +37,7 @@ public class InitDatabase
 		}
 		catch(SQLException | ClassNotFoundException e)
 		{
-			System.err.println("Error opening database");
+			System.err.println("Error creating database");
 			e.printStackTrace();
 		}
 	}
@@ -68,7 +68,7 @@ public class InitDatabase
 		}
 		catch(SQLException | ClassNotFoundException e)
 		{
-			System.err.println("Error opening database");
+			System.err.println("Error creating table customers");
 			e.printStackTrace();
 		}
 	}
@@ -85,21 +85,21 @@ public class InitDatabase
 				"serverTimezone=America/New_York";
 			Connection conn = DriverManager.getConnection(connString);
 			Statement stmt = conn.createStatement();
-			//creates employee table
-			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS employees (id INT AUTO_INCREMENT, " +
-					"fullName VARCHAR(40), " +
-					"position VARCHAR(24), " + 
-					"username VARCHAR(24), " + 
-					"password VARCHAR(64), " +
-					"salt VARCHAR(64)), " +
-					"PRIMARY KEY (id))");
+			//creates the customer table
+			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS employees (id INT AUTO_INCREMENT, "
+					+ "fullName VARCHAR(40), "
+					+ "position VARCHAR(24), "
+					+ "username VARCHAR(24), "
+					+ "password VARCHAR(64), "
+					+ "salt VARCHAR(64), "
+					+ "PRIMARY KEY (id))");
 			System.out.println("Table employees created in the database");
 			stmt.close();
 			conn.close();
 		}
 		catch(SQLException | ClassNotFoundException e)
 		{
-			System.err.println("Error opening database");
+			System.err.println("Error creating table employees");
 			e.printStackTrace();
 		}
 	}
