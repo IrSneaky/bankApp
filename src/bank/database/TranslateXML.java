@@ -64,13 +64,14 @@ public class TranslateXML
 				Element salt = doc.createElement("salt");
 				salt.appendChild(doc.createTextNode(customerList.get(i).getSalt()));
 				customer.appendChild(salt);
+				//creates file from info
+				TransformerFactory tranFac = TransformerFactory.newInstance();
+				Transformer tran = tranFac.newTransformer();
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new File("xml/customers" 
+							+ customerList.get(i).getAccountNumber() + ".xml"));
+				tran.transform(source, result);
 			}
-			//creates file from info
-			TransformerFactory tranFac = TransformerFactory.newInstance();
-			Transformer tran = tranFac.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("xml/customers.xml"));
-			tran.transform(source, result);
 		}
 		catch(Exception e)
 		{
