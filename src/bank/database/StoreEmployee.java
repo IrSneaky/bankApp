@@ -24,8 +24,7 @@ public class StoreEmployee
 	}
 
 
-	public void insertEmployee(String fullName, String position, String username, 
-			String password, String salt)
+	public void insertEmployee(Employee employee) 
 	{
 		try
 		{
@@ -42,11 +41,11 @@ public class StoreEmployee
 					+ "VALUES (?, ?, ?, ?, ?)";
 			//prepared statement setup
 			PreparedStatement pstmt = conn.prepareStatement(stmtString);
-			pstmt.setString(1, fullName);
-			pstmt.setString(2, position);
-			pstmt.setString(3, username);
-			pstmt.setString(4, password);
-			pstmt.setString(5, salt);
+			pstmt.setString(1, employee.getName());
+			pstmt.setString(2, employee.getPosition());
+			pstmt.setString(3, employee.getUsername());
+			pstmt.setString(4, employee.getPassword());
+			pstmt.setString(5, employee.getSalt());
 			pstmt.executeUpdate();
 			pstmt.close();
 			conn.close();

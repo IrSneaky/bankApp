@@ -89,11 +89,7 @@ class Login
 				System.out.println("Account created");
 				//puts in db user and pass to object
 				StoreEmployee empObj = new StoreEmployee(user, pass);
-				empObj.insertEmployee(employee1.getName(), 
-						employee1.getPosition(), 
-						employee1.getUsername(), 
-						employee1.getPassword(),
-						employee1.getSalt());
+				empObj.insertEmployee(employee1); 
 				System.out.println("Info stored in db");
 			}
 			else
