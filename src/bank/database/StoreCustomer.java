@@ -24,8 +24,7 @@ public class StoreCustomer
 	}
 
 
-	public void insertCustomer(String fullName, double balance, String username, 
-			String password, String salt)
+	public void insertCustomer(Customer customer)
 	{
 		try
 		{
@@ -42,11 +41,11 @@ public class StoreCustomer
 					+ "VALUES (?, ?, ?, ?, ?)";
 			//prepared statement setup
 			PreparedStatement pstmt = conn.prepareStatement(stmtString);
-			pstmt.setString(1, fullName);
-			pstmt.setDouble(2, balance);
-			pstmt.setString(3, username);
-			pstmt.setString(4, password);
-			pstmt.setString(5, salt);
+			pstmt.setString(1, customer.getName());
+			pstmt.setDouble(2, customer.getBalance());
+			pstmt.setString(3, customer.getUsername());
+			pstmt.setString(4, customer.getPassword());
+			pstmt.setString(5, customer.getSalt());
 			pstmt.executeUpdate();
 			pstmt.close();
 			conn.close();

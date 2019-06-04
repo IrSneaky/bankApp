@@ -42,11 +42,7 @@ class Login
 				System.out.println("Account created");
 				//puts in db user and pass to object
 				StoreCustomer cusObj = new StoreCustomer(user, pass);
-				cusObj.insertCustomer(customer1.getName(), 
-						customer1.getBalance(), 
-						customer1.getUsername(), 
-						customer1.getPassword(),
-						customer1.getSalt());
+				cusObj.insertCustomer(customer1);
 				System.out.println("Info stored in db");
 			}
 			else
@@ -122,11 +118,11 @@ class Login
 			TranslateXML xml = new TranslateXML();
 			StoreCustomer setupC = new StoreCustomer(args[0], args[1]);
 			StoreEmployee setupE = new StoreEmployee(args[0], args[1]);
-			System.out.println("Loading database...");
 			login.cList = setupC.getCustomers();
 			login.eList = setupE.getEmployees();
 			System.out.println("\nBanking Application. To close, enter exit");
 			System.out.println("=========================================");
+			System.out.println("Loading database...");
 			while (stop)
 			{
 				login.cList = setupC.getCustomers();
