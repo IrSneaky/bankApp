@@ -169,13 +169,14 @@ public class TranslateXML
 				Element salt = doc.createElement("salt");
 				salt.appendChild(doc.createTextNode(employeeList.get(i).getSalt()));
 				employee.appendChild(salt);
+				//creates file from info
+				TransformerFactory tranFac = TransformerFactory.newInstance();
+				Transformer tran = tranFac.newTransformer();
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new File("xml/employees"
+							+ employeeList.get(i).getId() + ".xml"));
+				tran.transform(source, result);
 			}
-			//creates file from info
-			TransformerFactory tranFac = TransformerFactory.newInstance();
-			Transformer tran = tranFac.newTransformer();
-			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("xml/employees.xml"));
-			tran.transform(source, result);
 		}
 		catch(Exception e)
 		{
