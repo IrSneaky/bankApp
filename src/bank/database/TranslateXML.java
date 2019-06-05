@@ -67,7 +67,7 @@ public class TranslateXML
 			TransformerFactory tranFac = TransformerFactory.newInstance();
 			Transformer tran = tranFac.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("xml/customers" 
+			StreamResult result = new StreamResult(new File("xml/customer/customer" 
 						+ newCust.getAccountNumber() + ".xml"));
 			tran.transform(source, result);
 		}
@@ -164,7 +164,7 @@ public class TranslateXML
 			TransformerFactory tranFac = TransformerFactory.newInstance();
 			Transformer tran = tranFac.newTransformer();
 			DOMSource source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File("xml/employees"
+			StreamResult result = new StreamResult(new File("xml/employee/employee"
 						+ newEmpl.getId() + ".xml"));
 			tran.transform(source, result);
 		}
