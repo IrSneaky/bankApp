@@ -109,18 +109,21 @@ class Login
 	{
 		if(args.length == 2)
 		{
+			System.out.println("\nBanking Application. To close, enter exit");
+			System.out.println("=========================================");
+			System.out.println("Loading database...");
+			//for while loop
 			boolean stop = true;
+			//set up objects to execute program
 			Login login = new Login();
 			TranslateXML xml = new TranslateXML();
 			StoreCustomer setupC = new StoreCustomer(args[0], args[1]);
 			StoreEmployee setupE = new StoreEmployee(args[0], args[1]);
 			login.cList = setupC.getCustomers();
 			login.eList = setupE.getEmployees();
-			System.out.println("\nBanking Application. To close, enter exit");
-			System.out.println("=========================================");
-			System.out.println("Loading database...");
 			while (stop)
 			{
+				//pulls data from db to set to list 
 				login.cList = setupC.getCustomers();
 				login.eList = setupE.getEmployees();
 				Scanner input1 = new Scanner(System.in);
@@ -129,6 +132,7 @@ class Login
 				System.out.println("Enter display to show current tables.");
 				System.out.print("--> ");
 				String choice = input1.nextLine();
+				//gives choice to what feature to use
 				if(choice.equals("c"))
 				{
 					login.enterInfoCustomer(args[0], args[1]);
@@ -143,12 +147,15 @@ class Login
 				}
 				else if(choice.equals("xml"))
 				{
+					//creates xml files for each customer and employee loaded
+					//into list
 					System.out.println("Generating XML...");
 					xml.customerXML(login.cList);
 					xml.employeeXML(login.eList);
 				}
 				else if(choice.equals("display"))
 				{
+					//display current cList and eList which are the tables in db
 					System.out.println("\n=================================");
 					System.out.println("Customer info:");
 					for(int i = 0; i < login.cList.size(); i++)
