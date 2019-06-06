@@ -13,11 +13,18 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchEvent;
 import java.nio.file.StandardWatchEventKinds;
 
-public class FileWatch
+public class FileWatch implements Runnable
 {
-	public FileWatch(){}
+	private String user;
+	private String pass;
 
-	public void watchForCustomerXML(String user, String pass)
+	public FileWatch(String user, String pass)
+	{
+		this.user = user;
+		this.pass = pass;
+	}
+
+	private void watchForCustomerXML()
 	{
 		try
 		{
@@ -52,6 +59,19 @@ public class FileWatch
 		catch(Exception e)
 		{
 			System.out.println("File watching failed");
+			e.printStackTrace();
+		}
+	}
+
+	public void run()
+	{
+		try
+		{
+			watchForCustomerXML();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Thread failed");
 			e.printStackTrace();
 		}
 	}
