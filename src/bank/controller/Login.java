@@ -10,12 +10,12 @@ class Login
 	private List<Customer> cList = new ArrayList<Customer>();
 	private List<Employee> eList = new ArrayList<Employee>();
 
-	public void enterInfoCustomer(String user, String pass)
+	public Customer enterInfoCustomer(List<Customer> cList)
 	{
 		//set up objects
-		InitDatabase db = new InitDatabase(user, pass);
 		Customer customer1 = new Customer();
 		PasswordEncryption passEncrypt = new PasswordEncryption();
+		TranslateXML xml = new TranslateXML();
 		//ask for Account variables
 		Scanner input1 = new Scanner(System.in);
 		System.out.println("Please enter: full name, username, password");
@@ -35,33 +35,41 @@ class Login
 			System.out.println("Please re-enter password");
 			String passCheck = input1.nextLine();
 			
-			db.createDB();
-			db.createCustomers();
 			if(passEncrypt.checkPass(passCheck, customer1.getPassword(), customer1.getSalt()))
 			{
 				System.out.println("Account created");
 				//puts in db user and pass to object
-				StoreCustomer cusObj = new StoreCustomer(user, pass);
-				cusObj.insertCustomer(customer1);
-				System.out.println("Info stored in db");
+				if (cList == null)
+				{
+					customer1.setAccountNumber(1);
+					xml.customerXML(customer1);
+				}
+				else
+				{
+					customer1.setAccountNumber(cList.size()+1);
+					xml.customerXML(customer1);
+				}
+				System.out.println("xml info for customer created");
 			}
 			else
 			{
 				System.out.println("Passwords do not match");
 			}
+			return customer1;
 		}
 		else
 		{
 			System.out.println("Please enter the format as: fullName, Username, password");
+			return null;
 		}
 	}
 
-	public void enterInfoEmployee(String user, String pass)
+	public Employee enterInfoEmployee(List<Employee> eList)
 	{
 		//set up objects
-		InitDatabase db = new InitDatabase(user, pass);
 		Employee employee1 = new Employee();
 		PasswordEncryption passEncrypt = new PasswordEncryption();
+		TranslateXML xml = new TranslateXML();
 		//ask for Account variables
 		Scanner input1 = new Scanner(System.in);
 		System.out.println("Please enter: full name, username, password");
@@ -81,25 +89,32 @@ class Login
 			System.out.println("Please re-enter password");
 			String passCheck = input1.nextLine();
 			
-			db.createDB();
-			db.createEmployees();
-
 			if(passEncrypt.checkPass(passCheck, employee1.getPassword(), employee1.getSalt()))
 			{
 				System.out.println("Account created");
 				//puts in db user and pass to object
-				StoreEmployee empObj = new StoreEmployee(user, pass);
-				empObj.insertEmployee(employee1); 
-				System.out.println("Info stored in db");
+				if (eList == null)
+				{
+					employee1.setId(1);
+					xml.employeeXML(employee1);
+				}
+				else
+				{
+					employee1.setId(eList.size()+1);
+					xml.employeeXML(employee1);
+				}
+				System.out.println("xml info for employee created");
 			}
 			else
 			{
 				System.out.println("Passwords do not match");
 			}
+			return employee1;
 		}
 		else
 		{
 			System.out.println("Please enter the format as: fullName, Username, password");
+			return null;
 		}
 	}
 
@@ -116,7 +131,6 @@ class Login
 			boolean stop = true;
 			//set up objects to execute program
 			Login login = new Login();
-			TranslateXML xml = new TranslateXML();
 			StoreCustomer setupC = new StoreCustomer(args[0], args[1]);
 			StoreEmployee setupE = new StoreEmployee(args[0], args[1]);
 			login.cList = setupC.getCustomers();
@@ -124,34 +138,23 @@ class Login
 			while (stop)
 			{
 				//pulls data from db to set to list 
-				login.cList = setupC.getCustomers();
-				login.eList = setupE.getEmployees();
 				Scanner input1 = new Scanner(System.in);
 				System.out.println("\nCustomer or Employee info?(c or e)");
-				System.out.println("Enter xml to generate xml files.");
 				System.out.println("Enter display to show current tables.");
 				System.out.print("--> ");
 				String choice = input1.nextLine();
 				//gives choice to what feature to use
 				if(choice.equals("c"))
 				{
-					login.enterInfoCustomer(args[0], args[1]);
+					login.cList.add(login.enterInfoCustomer(login.cList));
 				}
 				else if(choice.equals("e"))
 				{
-					login.enterInfoEmployee(args[0], args[1]);
+					login.eList.add(login.enterInfoEmployee(login.eList));
 				}
 				else if(choice.equals("exit"))
 				{
 					stop = false;
-				}
-				else if(choice.equals("xml"))
-				{
-					//creates xml files for each customer and employee loaded
-					//into list
-					System.out.println("Generating XML...");
-					xml.customerXML(login.cList);
-					xml.employeeXML(login.eList);
 				}
 				else if(choice.equals("display"))
 				{
