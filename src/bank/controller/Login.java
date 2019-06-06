@@ -137,6 +137,13 @@ class Login
 			Login login = new Login();
 			StoreCustomer setupC = new StoreCustomer(args[0], args[1]);
 			StoreEmployee setupE = new StoreEmployee(args[0], args[1]);
+
+			Runnable custTask = new FileWatchCustomer(args[0], args[1]);
+			Runnable emplTask = new FileWatchEmployee(args[0], args[1]);
+			ExecutorService pool = Executors.newCachedThreadPool();
+			pool.execute(custTask);
+			pool.execute(emplTask);
+
 			login.cList = setupC.getCustomers();
 			login.eList = setupE.getEmployees();
 			while (stop)
@@ -196,6 +203,7 @@ class Login
 					System.out.println("Please enter c, e, or exit.");
 				}
 			}
+			pool.shutdown();
 		}
 		else
 		{
