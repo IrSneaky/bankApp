@@ -12,6 +12,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.OutputKeys;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -29,14 +30,12 @@ public class TranslateXML
 			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
 			Document doc = docBuild.newDocument();
-			Element customer = doc.createElement("customer");
-			doc.appendChild(customer);
-			//Element mainEle = doc.createElement("customers");
-			//doc.appendChild(mainEle);
-			//create amount of customers determined by size
+			//Main element in file
+			Element mainEle = doc.createElement("bankCustomer");
+			doc.appendChild(mainEle);
 			//creates the customer wrap for info
-			//Element customer = doc.createElement("customer");
-			//mainEle.appendChild(customer);
+			Element customer = doc.createElement("customer");
+			mainEle.appendChild(customer);
 			//customer account number
 			Element accNum = doc.createElement("accountNumber");
 			accNum.appendChild(doc.createTextNode(
@@ -66,6 +65,7 @@ public class TranslateXML
 			//creates file from info
 			TransformerFactory tranFac = TransformerFactory.newInstance();
 			Transformer tran = tranFac.newTransformer();
+			tran.setOutputProperty(OutputKeys.INDENT, "yes");
 			DOMSource source = new DOMSource(doc);
 			StreamResult result = new StreamResult(new File("xml/customers/customer" 
 						+ newCust.getAccountNumber() + ".xml"));
@@ -84,6 +84,7 @@ public class TranslateXML
 		try
 		{
 			//grabs generated xml file from customerXML function
+			System.out.println("file path: " + filePath);
 			File xmlFile = new File(filePath);
 			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
@@ -93,19 +94,27 @@ public class TranslateXML
 			NodeList customerNodes = doc.getElementsByTagName("customer");
 			//creates temp customer to insert into db
 			Customer cTemp = new Customer();
-			Node cNode = customerNodes.item(1);
+			Node cNode = customerNodes.item(0);
 			if (cNode.getNodeType() == Node.ELEMENT_NODE)
 			{
 				//reads XML into customer temp
 				Element cEle = (Element) cNode;
 				cTemp.setAccountNumber(
-						Integer.parseInt(cEle.getAttribute("accountNumber")));
-				cTemp.setName(cEle.getAttribute("fullName"));
+						Integer.parseInt(
+						cEle.getElementsByTagName("accountNumber")
+						.item(0).getTextContent()));
+				cTemp.setName(cEle.getElementsByTagName("fullName")
+						.item(0).getTextContent());
 				cTemp.setBalance(
-						Double.parseDouble(cEle.getAttribute("balance")));
-				cTemp.setUsername(cEle.getAttribute("username"));
-				cTemp.setPassword(cEle.getAttribute("password"));
-				cTemp.setSalt(cEle.getAttribute("salt"));
+						Double.parseDouble(
+						cEle.getElementsByTagName("balance")
+						.item(0).getTextContent()));
+				cTemp.setUsername(cEle.getElementsByTagName("username")
+						.item(0).getTextContent());
+				cTemp.setPassword(cEle.getElementsByTagName("password")
+						.item(0).getTextContent());
+				cTemp.setSalt(cEle.getElementsByTagName("salt")
+						.item(0).getTextContent());
 			}
 			//puts temp into list
 			return cTemp;
@@ -195,12 +204,18 @@ public class TranslateXML
 			{
 				//reads XML into customer temp
 				Element eEle = (Element) eNode;
-				eTemp.setId(Integer.parseInt(eEle.getAttribute("accountNumber")));
-				eTemp.setName(eEle.getAttribute("fullName"));
-				eTemp.setPosition(eEle.getAttribute("position"));
-				eTemp.setUsername(eEle.getAttribute("username"));
-				eTemp.setPassword(eEle.getAttribute("password"));
-				eTemp.setSalt(eEle.getAttribute("salt"));
+				eTemp.setId(Integer.parseInt(eEle.getElementsByTagName("accountNumber")
+							.item(0).getTextContent()));
+				eTemp.setName(eEle.getElementsByTagName("fullName")
+						.item(0).getTextContent());
+				eTemp.setPosition(eEle.getElementsByTagName("position")
+						.item(0).getTextContent());
+				eTemp.setUsername(eEle.getElementsByTagName("username")
+						.item(0).getTextContent());
+				eTemp.setPassword(eEle.getElementsByTagName("password")
+						.item(0).getTextContent());
+				eTemp.setSalt(eEle.getElementsByTagName("salt")
+						.item(0).getTextContent());
 			}
 			return eTemp;
 		}

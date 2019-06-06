@@ -1,1 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><customer><accountNumber>9</accountNumber><fullName>Scooby Doo</fullName><balance>0.0</balance><username>Scoobs</username><password>9eGWGFSH3bYdBbfqauI42NLRhaVjkkfzHwdvX+Npb80=</password><salt>twXIKh8hCXl/lhRCWCisjQDHrIe/Rhrme6NiZ+sw8C0=</salt></customer>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bankCustomer>
+    <customer>
+        <accountNumber>9</accountNumber>
+        <fullName>Scooby Doo</fullName>
+        <balance>0.0</balance>
+        <username>Scoobs</username>
+        <password>INMqO+L1FQubcYxLGmIoUt7sfcRJfHnG7d0kJKwuFkI=</password>
+        <salt>menuxOH4tqbWDqZ32BkcBEF3PcvTa2Yh/0iG002Yq+A=</salt>
+    </customer>
+</bankCustomer>
