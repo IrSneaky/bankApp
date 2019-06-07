@@ -28,6 +28,8 @@ public class StoreEmployee
 	{
 		try
 		{
+			System.out.println("Inserting employee " + employee.getId()
+					+ "into database...");
 			//sets db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//sets timezone and connects
@@ -49,6 +51,7 @@ public class StoreEmployee
 			pstmt.executeUpdate();
 			pstmt.close();
 			conn.close();
+			System.out.println("Insert successful.");
 		}
 		catch(SQLException | ClassNotFoundException e)
 		{

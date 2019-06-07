@@ -144,6 +144,7 @@ class Login
 			pool.execute(custTask);
 			pool.execute(emplTask);
 
+			TranslateXML xml = new TranslateXML();
 			login.cList = setupC.getCustomers();
 			login.eList = setupE.getEmployees();
 			while (stop)

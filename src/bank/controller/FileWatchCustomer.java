@@ -50,7 +50,7 @@ public class FileWatchCustomer implements Runnable
 				String filePath = "xml/customers/" + fileName;
 				//pass full name into xml file reader into object
 				Customer newCust = xml.readCustomerXML(filePath);
-				//store customer in database]
+				//store customer in database
 				customer.insertCustomer(newCust);
 			}
 

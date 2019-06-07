@@ -84,11 +84,10 @@ public class TranslateXML
 		try
 		{
 			//grabs generated xml file from customerXML function
-			System.out.println("file path: " + filePath);
 			File xmlFile = new File(filePath);
 			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
-			Document doc = docBuild.parse(xmlFile);
+			Document doc = docBuild.parse(filePath);
 			doc.getDocumentElement().normalize();
 			//gets list of customers
 			NodeList customerNodes = doc.getElementsByTagName("customer");
