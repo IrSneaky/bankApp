@@ -28,8 +28,8 @@ public class StoreEmployee
 	{
 		try
 		{
-			System.out.println("Inserting employee " + employee.getId()
-					+ "into database...");
+			System.out.println("Inserting employee" + employee.getId()
+					+ " into database...");
 			//sets db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//sets timezone and connects
