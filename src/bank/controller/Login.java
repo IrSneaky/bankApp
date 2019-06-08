@@ -6,8 +6,6 @@ import bank.database.*;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 class Login
 {
@@ -19,7 +17,7 @@ class Login
 		//set up objects
 		Customer customer1 = new Customer();
 		PasswordEncryption passEncrypt = new PasswordEncryption();
-		TranslateXML xml = new TranslateXML();
+		CreateXML xml = new CreateXML();
 		//ask for Account variables
 		Scanner input1 = new Scanner(System.in);
 		System.out.println("Please enter: full name, username, password");
@@ -72,7 +70,7 @@ class Login
 		//set up objects
 		Employee employee1 = new Employee();
 		PasswordEncryption passEncrypt = new PasswordEncryption();
-		TranslateXML xml = new TranslateXML();
+		CreateXML xml = new CreateXML();
 		//ask for Account variables
 		Scanner input1 = new Scanner(System.in);
 		System.out.println("Please enter: full name, username, password");
@@ -141,7 +139,7 @@ class Login
 			custTask.start();
 			emplTask.start();
 			
-			//TranslateXML xml = new TranslateXML();
+			//ReadCustomerXML xml = new ReadCustomerXML("xml/customers/customer9.xml");
 			login.cList = setupC.getCustomers();
 			login.eList = setupE.getEmployees();
 			while (stop)
@@ -156,7 +154,7 @@ class Login
 				if(choice.equals("c"))
 				{
 					login.cList.add(login.enterInfoCustomer(login.cList));
-					//Customer c1 = xml.readCustomerXML("xml/customers/customer9.xml");
+					//Customer c1 = xml.readXML();
 					//System.out.println("Name: " + c1.getName());
 				}
 				else if(choice.equals("e"))
