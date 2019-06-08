@@ -38,28 +38,36 @@ public class FileWatchEmployee implements Runnable
 					StandardWatchEventKinds.ENTRY_MODIFY);
 
 			//initialize objects for while loop
-			WatchKey key;
 			StoreEmployee employee = new StoreEmployee(user, pass);
-			TranslateXML xml = new TranslateXML();
-			key = watcher.take();
-			for (WatchEvent<?> event : key.pollEvents())
+			WatchKey key;
+			while ((key = watcher.take()) != null)
 			{
-				//cast file name into string
-				String fileName = event.context().toString();
-				//add full path to name
-				String filePath = "xml/employees/" + fileName;
-				//pass full name into xml file reader into object
-				Employee newEmpl = xml.readEmployeeXML(filePath);
-				//store employee in database]
-				employee.insertEmployee(newEmpl);
+				for (WatchEvent<?> event : key.pollEvents())
+				{
+					TranslateXML xml = new TranslateXML();
+					//cast file name into string
+					String fileName = event.context().toString();
+					//add full path to name
+					String filePath = "xml/employees/" + fileName;
+					//pass full name into xml file reader into object
+					Employee newEmpl = xml.readEmployeeXML(filePath);
+					//store employee in database
+					if (newEmpl != null)
+					{
+						employee.insertEmployee(newEmpl);
+					}
+					else
+					{
+						System.out.println("No xml data to read");
+					}
+				}
+				key.reset();
 			}
-
-			
 		}
 		catch(Exception e)
 		{
-			System.out.println("File watching failed");
-			e.printStackTrace();
+			System.out.println("File watching stopped for xml/employees.");
+			//e.printStackTrace();
 		}
 	}
 

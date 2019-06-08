@@ -38,28 +38,37 @@ public class FileWatchCustomer implements Runnable
 					StandardWatchEventKinds.ENTRY_MODIFY);
 
 			//initialize objects for while loop
-			WatchKey key;
 			StoreCustomer customer = new StoreCustomer(user, pass);
-			TranslateXML xml = new TranslateXML();
-			key = watcher.take();
-			for (WatchEvent<?> event : key.pollEvents())
+			WatchKey key;
+			while ((key = watcher.take()) != null)
 			{
-				//cast file name into string
-				String fileName = event.context().toString();
-				//add full path to name
-				String filePath = "xml/customers/" + fileName;
-				//pass full name into xml file reader into object
-				Customer newCust = xml.readCustomerXML(filePath);
-				//store customer in database
-				customer.insertCustomer(newCust);
+				for (WatchEvent<?> event : key.pollEvents())
+				{
+					TranslateXML xml = new TranslateXML();
+					//cast file name into string
+					String fileName = event.context().toString();
+					//add full path to name
+					String filePath = "xml/customers/" + fileName;
+					//pass full name into xml file reader into object
+					Customer newCust = xml.readCustomerXML(filePath);
+					//store customer in database
+					if (newCust != null)
+					{
+						customer.insertCustomer(newCust);
+					}
+					else
+					{
+						System.out.println("No xml data to read");
+					}
+				}
+				key.reset();
 			}
-
 			
 		}
 		catch(Exception e)
 		{
-			System.out.println("File watching failed");
-			e.printStackTrace();
+			System.out.println("File watching stopped for xml/customers.");
+			//e.printStackTrace();
 		}
 	}
 
