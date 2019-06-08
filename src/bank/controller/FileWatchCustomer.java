@@ -1,7 +1,7 @@
 package bank.controller;
 
 import bank.database.StoreCustomer;
-import bank.database.TranslateXML;
+import bank.database.ReadCustomerXML;
 import bank.beans.Customer;
 
 import java.nio.file.WatchService;
@@ -12,11 +12,16 @@ import java.nio.file.Paths;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchEvent;
 import java.nio.file.StandardWatchEventKinds;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.Callable;
 
 public class FileWatchCustomer implements Runnable
 {
 	private String user;
 	private String pass;
+	private final ExecutorService pool = Executors.newFixedThreadPool(10);
 
 	public FileWatchCustomer(String user, String pass)
 	{
@@ -29,13 +34,16 @@ public class FileWatchCustomer implements Runnable
 		try
 		{
 			//set up watch
-			WatchService watcher = FileSystems.getDefault().newWatchService();
-			//directory path to xml files for customers
 			Path dir = Paths.get("xml/customers/");
+			WatchService watcher = dir.getFileSystem().newWatchService();
+			//directory path to xml files for customers
 	
 			//check for new and modified files
-			dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE, 
+			//dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE, 
+			//		StandardWatchEventKinds.ENTRY_MODIFY);
+			dir.register(watcher, 
 					StandardWatchEventKinds.ENTRY_MODIFY);
+
 
 			//initialize objects for while loop
 			StoreCustomer customer = new StoreCustomer(user, pass);
@@ -44,13 +52,14 @@ public class FileWatchCustomer implements Runnable
 			{
 				for (WatchEvent<?> event : key.pollEvents())
 				{
-					TranslateXML xml = new TranslateXML();
+					System.out.println("Event kind: " + event.kind());
 					//cast file name into string
 					String fileName = event.context().toString();
 					//add full path to name
 					String filePath = "xml/customers/" + fileName;
-					//pass full name into xml file reader into object
-					Customer newCust = xml.readCustomerXML(filePath);
+					Callable<Customer> task = new ReadCustomerXML(filePath);
+					Future<Customer> future = pool.submit(task);
+					Customer newCust = future.get();
 					//store customer in database
 					if (newCust != null)
 					{
@@ -77,6 +86,7 @@ public class FileWatchCustomer implements Runnable
 		try
 		{
 			watchForCustomerXML();
+			pool.shutdown();
 		}
 		catch(Exception e)
 		{
