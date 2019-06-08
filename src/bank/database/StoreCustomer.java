@@ -28,8 +28,8 @@ public class StoreCustomer
 	{
 		try
 		{
-			System.out.println("Inserting customer " + customer.getAccountNumber()
-					+ "into database...");
+			System.out.println("Inserting customer" + customer.getAccountNumber()
+					+ " into database...");
 			//sets db driver
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			//sets timezone and connects
