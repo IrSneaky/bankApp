@@ -1,7 +1,7 @@
 package bank.controller;
 
 import bank.database.StoreEmployee;
-import bank.database.TranslateXML;
+import bank.database.ReadEmployeeXML;
 import bank.beans.Employee;
 
 import java.nio.file.WatchService;
@@ -12,11 +12,16 @@ import java.nio.file.Paths;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchEvent;
 import java.nio.file.StandardWatchEventKinds;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.Callable;
 
 public class FileWatchEmployee implements Runnable
 {
 	private String user;
 	private String pass;
+	private final ExecutorService pool = Executors.newFixedThreadPool(10);
 
 	public FileWatchEmployee(String user, String pass)
 	{
@@ -29,12 +34,12 @@ public class FileWatchEmployee implements Runnable
 		try
 		{
 			//set up watch
-			WatchService watcher = FileSystems.getDefault().newWatchService();
-			//directory path to xml files for employees
 			Path dir = Paths.get("xml/employees/");
+			WatchService watcher = dir.getFileSystem().newWatchService();
+			//directory path to xml files for employees
 	
 			//check for new and modified files
-			dir.register(watcher, StandardWatchEventKinds.ENTRY_CREATE, 
+			dir.register(watcher,
 					StandardWatchEventKinds.ENTRY_MODIFY);
 
 			//initialize objects for while loop
@@ -44,13 +49,14 @@ public class FileWatchEmployee implements Runnable
 			{
 				for (WatchEvent<?> event : key.pollEvents())
 				{
-					TranslateXML xml = new TranslateXML();
 					//cast file name into string
 					String fileName = event.context().toString();
 					//add full path to name
 					String filePath = "xml/employees/" + fileName;
+					Callable<Employee> task = new ReadEmployeeXML(filePath);
+					Future<Employee> future = pool.submit(task);
 					//pass full name into xml file reader into object
-					Employee newEmpl = xml.readEmployeeXML(filePath);
+					Employee newEmpl = future.get();
 					//store employee in database
 					if (newEmpl != null)
 					{
@@ -76,6 +82,7 @@ public class FileWatchEmployee implements Runnable
 		try
 		{
 			watchForEmployeeXML();
+			pool.shutdown();
 		}
 		catch(Exception e)
 		{
