@@ -87,7 +87,7 @@ public class TranslateXML
 			File xmlFile = new File(filePath);
 			DocumentBuilderFactory docBuildFact = DocumentBuilderFactory.newInstance();
 			DocumentBuilder docBuild = docBuildFact.newDocumentBuilder();
-			Document doc = docBuild.parse(filePath);
+			Document doc = docBuild.parse(xmlFile);
 			doc.getDocumentElement().normalize();
 			//gets list of customers
 			NodeList customerNodes = doc.getElementsByTagName("customer");
@@ -198,7 +198,7 @@ public class TranslateXML
 			NodeList employeeNodes = doc.getElementsByTagName("employee");
 			//creates temp employee to insert into list
 			Employee eTemp = new Employee();
-			Node eNode = employeeNodes.item(1);
+			Node eNode = employeeNodes.item(0);
 			if (eNode.getNodeType() == Node.ELEMENT_NODE)
 			{
 				//reads XML into customer temp
