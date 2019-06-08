@@ -53,7 +53,6 @@ class Login
 					customer1.setAccountNumber(cList.size()+1);
 					xml.customerXML(customer1);
 				}
-				System.out.println("xml info for customer created");
 			}
 			else
 			{
@@ -107,7 +106,6 @@ class Login
 					employee1.setId(eList.size()+1);
 					xml.employeeXML(employee1);
 				}
-				System.out.println("xml info for employee created");
 			}
 			else
 			{
@@ -138,13 +136,12 @@ class Login
 			StoreCustomer setupC = new StoreCustomer(args[0], args[1]);
 			StoreEmployee setupE = new StoreEmployee(args[0], args[1]);
 
-			Runnable custTask = new FileWatchCustomer(args[0], args[1]);
-			Runnable emplTask = new FileWatchEmployee(args[0], args[1]);
-			ExecutorService pool = Executors.newCachedThreadPool();
-			pool.execute(custTask);
-			pool.execute(emplTask);
-
-			TranslateXML xml = new TranslateXML();
+			Thread custTask = new Thread(new FileWatchCustomer(args[0], args[1]));	
+			Thread emplTask = new Thread(new FileWatchEmployee(args[0], args[1]));
+			custTask.start();
+			emplTask.start();
+			
+			//TranslateXML xml = new TranslateXML();
 			login.cList = setupC.getCustomers();
 			login.eList = setupE.getEmployees();
 			while (stop)
@@ -159,6 +156,8 @@ class Login
 				if(choice.equals("c"))
 				{
 					login.cList.add(login.enterInfoCustomer(login.cList));
+					//Customer c1 = xml.readCustomerXML("xml/customers/customer9.xml");
+					//System.out.println("Name: " + c1.getName());
 				}
 				else if(choice.equals("e"))
 				{
@@ -204,7 +203,8 @@ class Login
 					System.out.println("Please enter c, e, or exit.");
 				}
 			}
-			pool.shutdown();
+			custTask.interrupt();
+			emplTask.interrupt();
 		}
 		else
 		{
