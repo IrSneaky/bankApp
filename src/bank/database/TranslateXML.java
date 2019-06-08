@@ -203,8 +203,10 @@ public class TranslateXML
 			{
 				//reads XML into customer temp
 				Element eEle = (Element) eNode;
-				eTemp.setId(Integer.parseInt(eEle.getElementsByTagName("accountNumber")
-							.item(0).getTextContent()));
+				eTemp.setId(
+						Integer.parseInt(
+						eEle.getElementsByTagName("id")
+						.item(0).getTextContent()));
 				eTemp.setName(eEle.getElementsByTagName("fullName")
 						.item(0).getTextContent());
 				eTemp.setPosition(eEle.getElementsByTagName("position")
